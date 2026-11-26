@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12161c">
+<title>Förhör</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: #12161c; color: #e8eaee; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: calc(28px + env(safe-area-inset-top, 0px)) 18px calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+  main { max-width: 520px; margin: 0 auto; }
+  .kicker { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #6fbf73; font-weight: 600; }
+  h1 { font-size: 34px; line-height: 1.1; margin: 6px 0 6px; letter-spacing: -.5px; }
+  .lead { color: #9aa3af; font-size: 15px; margin: 0 0 24px; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .rec {
+    background: #1b212a; border: 1px solid #2a323e; border-radius: 16px;
+    padding: 14px 16px 14px 14px; display: grid; grid-template-columns: 52px 1fr; column-gap: 14px; align-items: center;
+    transition: border-color .15s, background .15s;
+  }
+  .rec.active { border-color: #6fbf73; background: #1e2730; }
+  .play {
+    width: 52px; height: 52px; border-radius: 50%; border: 0; cursor: pointer;
+    background: #6fbf73; color: #0e1318; display: flex; align-items: center; justify-content: center;
+    transition: transform .1s;
+  }
+  .play:active { transform: scale(.93); }
+  .play:focus-visible, .bar:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .play svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+  .play .pause { display: none; }
+  .rec.playing .play .pause { display: block; }
+  .rec.playing .play .tri { display: none; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .name { font-size: 19px; font-weight: 600; letter-spacing: -.2px; }
+  .time { font-size: 13px; color: #9aa3af; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bar {
+    position: relative; height: 24px; margin-top: 4px; cursor: pointer; touch-action: none;
+    display: flex; align-items: center;
+  }
+  .bar::before { content: ""; position: absolute; left: 0; right: 0; height: 4px; border-radius: 2px; background: #333d4a; }
+  .fill { position: absolute; left: 0; height: 4px; border-radius: 2px; background: #6fbf73; width: 0; }
+  .knob { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #e8eaee; left: 0; margin-left: -6px; opacity: 0; transition: opacity .15s; }
+  .rec.active .knob { opacity: 1; }
+  footer { margin-top: 28px; color: #5d6673; font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">En sista natt på Gröna linjen</div>
+  <h1>Förhör</h1>
+  <p class="lead">Ljudupptagningar från förhören. Tryck på en inspelning för att lyssna.</p>
+  <ol id="list"></ol>
+  <footer>Notrace UF</footer>
+</main>
+<script>
+/* =====================================================================
+   SPELETS INNEHÅLL – lägg till, ta bort eller byt ordning på förhören här.
+   name: namnet som visas.  file: ljudfilen i mappen ljud/.
+   ===================================================================== */
+var FORHOR = [
+  { name: "Layla",    file: "forhor-layla.mp3" },
+  { name: "Ruben",    file: "forhor-ruben.mp3" },
+  { name: "Loke",     file: "forhor-loke.mp3" },
+  { name: "Frida",    file: "forhor-frida.mp3" },
+  { name: "Alexia",   file: "forhor-alexia.mp3" },
+  { name: "Elias",    file: "forhor-elias.mp3" },
+  { name: "Kristina", file: "forhor-kristina.mp3" }
+];
+
+(function () {
+  var list = document.getElementById("list"), items = [];
+  function fmt(s) { if (!isFinite(s)) return "–:––"; s = Math.round(s); return Math.floor(s / 60) + ":" + ("0" + s % 60).slice(-2); }
+
+  FORHOR.forEach(function (f) {
+    var li = document.createElement("li"); li.className = "rec";
+    li.innerHTML =
+      '<button class="play" type="button"><svg class="tri" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' +
+      '<svg class="pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>' +
+      '<div><div class="top"><span class="name"></span><span class="time">–:––</span></div>' +
+      '<div class="bar" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">' +
+      '<span class="fill"></span><span class="knob"></span></div></div>';
+    li.querySelector(".name").textContent = f.name;
+    var a = new Audio(); a.preload = "metadata"; a.src = "ljud/" + f.file;
+    var btn = li.querySelector(".play"), bar = li.querySelector(".bar"),
+        fill = li.querySelector(".fill"), knob = li.querySelector(".knob"), time = li.querySelector(".time");
+    btn.setAttribute("aria-label", "Spela förhör med " + f.name);
+    bar.setAttribute("aria-label", "Position i förhör med " + f.name);
+
+    function draw() {
+      var p = a.duration ? a.currentTime / a.duration : 0;
+      fill.style.width = knob.style.left = (p * 100) + "%";
+      bar.setAttribute("aria-valuenow", Math.round(p * 100));
+      time.textContent = (a.currentTime > 0 || !a.paused) ? fmt(a.currentTime) + " / " + fmt(a.duration) : fmt(a.duration);
+    }
+    a.addEventListener("loadedmetadata", draw);
+    a.addEventListener("timeupdate", draw);
+    a.addEventListener("play", function () {
+      items.forEach(function (o) { if (o.a !== a) { o.a.pause(); o.li.classList.remove("active"); } });
+      li.classList.add("playing", "active");
+      btn.setAttribute("aria-label", "Pausa förhör med " + f.name);
+    });
+    a.addEventListener("pause", function () {
+      li.classList.remove("playing");
+      btn.setAttribute("aria-label", "Spela förhör med " + f.name);
+    });
+    a.addEventListener("ended", function () { a.currentTime = 0; li.classList.remove("active"); draw(); });
+    btn.addEventListener("click", function () { if (a.paused) a.play(); else a.pause(); });
+
+    function seek(e) {
+      if (!a.duration) return;
+      var r = bar.getBoundingClientRect();
+      a.currentTime = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * a.duration; draw();
+    }
+    bar.addEventListener("pointerdown", function (e) { bar.setPointerCapture(e.pointerId); seek(e); });
+    bar.addEventListener("pointermove", function (e) { if (bar.hasPointerCapture(e.pointerId)) seek(e); });
+    bar.addEventListener("keydown", function (e) {
+      if (!a.duration) return;
+      if (e.key === "ArrowRight") a.currentTime = Math.min(a.duration, a.currentTime + 5);
+      else if (e.key === "ArrowLeft") a.currentTime = Math.max(0, a.currentTime - 5);
+      else return;
+      e.preventDefault(); draw();
+    });
+
+    items.push({ a: a, li: li }); list.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>
