@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<title>Telefon</title>
+<link rel="stylesheet" href="../telefon.css">
+</head>
+<body>
+<script>
+/* =====================================================================
+   SPELETS INNEHÅLL – ändra text, tider och namn här.
+   Utseende och logik ligger i ../telefon.css och ../telefon.js.
+
+   from:   samma bokstav som "me" = telefonens ägare (grön bubbla till höger)
+   date, time, listWhen: valfria – utelämnas de visas ingen tid.
+   open:   vilken app som öppnas. Saknas open skakar ikonen bara.
+   ===================================================================== */
+window.PHONE = {
+  owner: "Clara", me: "C",
+  time: "23:30",                       // klockan i statusraden
+
+  threads: [
+    { name: "Nora", days: [{ msgs: [
+      { from: "C", text: "Hur gick det med Alex igår?" },
+      { from: "N", text: "Inte bra, fattar inte hur han kan behandla mig såhär." },
+      { from: "C", text: "Du förtjänar så mycket bättre." },
+      { from: "N", text: "Snälla säg inget bara." },
+      { from: "C", text: "Okej." }
+    ]}]}
+  ],
+
+  // SL-appen
+  tickets: [
+    { kind: "Enkelbiljett", detail: "Buss", status: "Aktiv", validTo: "23:47" }
+  ],
+
+  home: [
+    { icon: "photos",   label: "Bilder" },
+    { icon: "music",    label: "Musik" },
+    { icon: "transit",  label: "SL", open: "ticket" },
+    { icon: "camera",   label: "Kamera" },
+    { icon: "notes",    label: "Anteckningar" },
+    { icon: "weather",  label: "Väder" },
+    { icon: "clock",    label: "Klocka" },
+    { icon: "mail",     label: "Mejl" }
+  ],
+  dock: [
+    { icon: "messages", label: "Meddelanden", open: "messages" }
+  ]
+};
+</script>
+<script src="../telefon.js"></script>
+</body>
+</html>

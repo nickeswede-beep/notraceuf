@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<title>Telefon</title>
+<link rel="stylesheet" href="../telefon.css">
+</head>
+<body>
+<script>
+/* =====================================================================
+   SPELETS INNEHÅLL – ändra text, tider och namn här.
+   Utseende och logik ligger i ../telefon.css och ../telefon.js.
+
+   from:   samma bokstav som "me" = telefonens ägare (grön bubbla till höger)
+   date, time, listWhen: valfria – utelämnas de visas ingen tid.
+   open:   vilken app som öppnas. Saknas open skakar ikonen bara.
+   ===================================================================== */
+window.PHONE = {
+  owner: "Alex", me: "A",
+  time: "23:30",                       // klockan i statusraden
+
+  threads: [
+    { name: "Nora ❤️", days: [{ msgs: [
+      { from: "N", text: "Tänkte du ens berätta för mig?" },
+      { from: "A", text: "Kan vi inte ta det en annan gång?" },
+      { from: "N", text: "Du säger alltid så." },
+      { from: "A", text: "Orkar inte bråka innan festen." },
+      { from: "N", text: "Du är ju dum i huvet." }
+    ]}]},
+    { name: "Vincent", days: [{ msgs: [
+      { from: "A", text: "Du lovade att fixa innan studenten." },
+      { from: "V", text: "Vet, behöver mer tid." },
+      { from: "A", text: "Du har ju för fan sagt det i veckor." },
+      { from: "V", text: "Löser imorgon." },
+      { from: "A", text: "Vi ska snacka ikväll." }
+    ]}]},
+    { name: "Clara", days: [{ msgs: [
+      { from: "C", text: "Tycker faktiskt du borde prata med Nora." },
+      { from: "A", text: "Kan du sluta lägga dig i?!" },
+      { from: "C", text: "Hon är min bästa vän Alex." },
+      { from: "A", text: "Vi snackar senare." }
+    ]}]},
+    { name: "Noah", listWhen: "10 juni", days: [{ date: "10 juni", msgs: [
+      { from: "N", text: "Så vad händer med vår studentresa?" },
+      { from: "A", text: "Vet inte om jag kan längre." },
+      { from: "N", text: "Skojar du? Vi har ju planerat i evigheter." },
+      { from: "A", text: "Mycket har ändrats." },
+      { from: "N", text: "13 år av vänskap och du kan inte ens berätta vad som händer?" },
+      { from: "N", text: "Vi måste snacka." }
+    ]}]}
+  ],
+
+  // Telefonlistan. length: samtalslängd, eller null för missat samtal.
+  // Exempel: { name: "Nora", date: "12 juni", time: "21:04", length: "2 min 10 sek" },
+  calls: [
+  ],
+
+  home: [
+    { icon: "flow",     label: "Instagram" },
+    { icon: "social",   label: "Facebook" },
+    { icon: "phone",    label: "Telefon", open: "phone" },
+    { icon: "photos",   label: "Bilder" },
+    { icon: "camera",   label: "Kamera" },
+    { icon: "music",    label: "Musik" },
+    { icon: "maps",     label: "Kartor" },
+    { icon: "weather",  label: "Väder" }
+  ],
+  dock: [
+    { icon: "messages", label: "Meddelanden", open: "messages" }
+  ]
+};
+</script>
+<script src="../telefon.js"></script>
+</body>
+</html>

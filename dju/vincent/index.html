@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<title>Telefon</title>
+<link rel="stylesheet" href="../telefon.css">
+</head>
+<body>
+<script>
+/* =====================================================================
+   SPELETS INNEHÅLL – ändra text, tider och namn här.
+   Utseende och logik ligger i ../telefon.css och ../telefon.js.
+
+   from:   samma bokstav som "me" = telefonens ägare (grön bubbla till höger)
+   date, time, listWhen: valfria – utelämnas de visas ingen tid.
+   open:   vilken app som öppnas. Saknas open skakar ikonen bara.
+   ===================================================================== */
+window.PHONE = {
+  owner: "Vincent", me: "V",
+  time: "23:30",                       // klockan i statusraden
+
+  threads: [
+    { name: "Alex", days: [{ msgs: [
+      { from: "A", text: "Du lovade att fixa innan studenten." },
+      { from: "V", text: "Vet, behöver mer tid." },
+      { from: "A", text: "Du har ju för fan sagt det i veckor." },
+      { from: "V", text: "Löser imorgon." },
+      { from: "A", text: "Vi ska snacka ikväll." }
+    ]}]},
+    { name: "Elias", days: [{ msgs: [
+      { from: "E", text: "Har han fortfarande inte betalat?" },
+      { from: "V", text: "Nej han kommer bara med nya ursäkter hela tiden." },
+      { from: "E", text: "Du får snacka med honom ordentligt!" },
+      { from: "V", text: "Aa löser imorgon." }
+    ]}]},
+    { name: "Noah", days: [{ msgs: [
+      { from: "N", text: "Vad händer med dig och Alex?" },
+      { from: "V", text: "Inte ditt problem, bry dig inte." },
+      { from: "N", text: "Ni fattar väl att det påverkar oss andra?" },
+      { from: "V", text: "Lägg dig inte i." }
+    ]}]}
+  ],
+
+  reminders: [
+    { text: "Betala Alex" }
+  ],
+
+  home: [
+    { icon: "music",     label: "Musik" },
+    { icon: "photos",    label: "Bilder" },
+    { icon: "reminders", label: "Påminnelser", open: "reminders" },
+    { icon: "maps",      label: "Kartor" },
+    { icon: "clock",     label: "Klocka" },
+    { icon: "weather",   label: "Väder" },
+    { icon: "settings",  label: "Inställningar" }
+  ],
+  dock: [
+    { icon: "camera",   label: "Kamera" },
+    { icon: "messages", label: "Meddelanden", open: "messages" }
+  ]
+};
+</script>
+<script src="../telefon.js"></script>
+</body>
+</html>
