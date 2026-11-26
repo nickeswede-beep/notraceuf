@@ -199,3 +199,4 @@
   .ticket .t-valid b { font-size: 30px; font-weight: 700; letter-spacing: -.5px; }
   .ticket .t-valid b { font-size: 24px; }
   .ticket.expired { background: #a9abb3; box-shadow: none; }
+  .thread .preview { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; height: auto; }
