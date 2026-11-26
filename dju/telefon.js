@@ -10,6 +10,7 @@ const P = window.PHONE;
 const ICONS = {
   social: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f8df5"/><stop offset="1" stop-color="#2459c9"/></linearGradient></defs><rect width="60" height="60" fill="url(#gs)"/><circle cx="23" cy="23" r="7" fill="#fff"/><path d="M9 45c0-8 6-12 14-12s14 4 14 12z" fill="#fff"/><circle cx="41" cy="25" r="5.5" fill="#fff" opacity=".75"/><path d="M38 34.5c7-1 14 2.5 14 10.500H40c0-4-.5-7.500-2-10.500z" fill="#fff" opacity=".75"/></svg>`,
   flow: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b05ad8"/><stop offset="1" stop-color="#e2557f"/></linearGradient></defs><rect width="60" height="60" fill="url(#gf)"/><rect x="12" y="14" width="28" height="28" rx="4" fill="#fff" opacity=".55" transform="rotate(-8 26 28)"/><rect x="20" y="18" width="28" height="28" rx="4" fill="#fff"/><path d="M23 42l8-10 6 6 4-4 5 8z" fill="#b05ad8"/><circle cx="41" cy="26" r="3" fill="#e2557f"/></svg>`,
+  calendar: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#fff"/><rect width="60" height="17" fill="#e5372b"/><text x="30" y="12.5" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#fff" letter-spacing=".6">${P.month}</text><text x="30" y="47" text-anchor="middle" font-family="-apple-system,Helvetica,Arial,sans-serif" font-size="30" font-weight="300" fill="#1c1c1e">${P.day}</text></svg>`,
   notes: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#f6e7b4"/><g stroke="#c9b371" stroke-width="2" stroke-linecap="round"><path d="M13 20h24M13 29h20M13 38h14"/></g><path d="M44 14l6 6-17 17-8 2 2-8z" fill="#e8963a"/><path d="M27 31l6 6-8 2z" fill="#4a3a2a"/></svg>`,
   photos: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd3f4"/><stop offset="1" stop-color="#d6f0fb"/></linearGradient></defs><rect width="60" height="60" fill="url(#gp)"/><circle cx="43" cy="17" r="6.5" fill="#ffd34d"/><path d="M0 46l17-19 13 14 9-8 21 19v8H0z" fill="#3fa46a"/><path d="M0 52l17-13 13 9 9-5 21 11v6H0z" fill="#2c7d50"/></svg>`,
   mail: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#fff"/><rect x="11" y="17" width="38" height="27" rx="4" fill="none" stroke="#d8402f" stroke-width="3.4"/><path d="M12.5 20l17.500 13 17.500-13" fill="none" stroke="#d8402f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -149,9 +150,9 @@ calls.forEach(c => {
 
 // ---- Biljetter ----
 (P.tickets || []).forEach(t => {
-  $("#tickets").appendChild(el("div", "ticket",
+  $("#tickets").appendChild(el("div", "ticket" + (t.expired ? " expired" : ""),
     `<div class="t-top"><span class="t-kind">${esc(t.kind)}</span><span class="t-badge">${esc(t.status)}</span></div>
      <div class="t-sub">${esc(t.detail)}</div>
-     <div class="t-valid"><span>Giltig till</span><b>${esc(t.validTo)}</b></div>`));
+     <div class="t-valid"><span>${t.expired ? "Gick ut" : "Giltig till"}</span><b>${esc(t.validTo)}</b></div>`));
 });
 })();

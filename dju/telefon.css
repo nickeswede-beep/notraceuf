@@ -197,3 +197,5 @@
   .ticket .t-sub { font-size: 15px; opacity: .85; margin-top: 2px; }
   .ticket .t-valid { margin-top: 22px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,.45); display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; }
   .ticket .t-valid b { font-size: 30px; font-weight: 700; letter-spacing: -.5px; }
+  .ticket .t-valid b { font-size: 24px; }
+  .ticket.expired { background: #a9abb3; box-shadow: none; }

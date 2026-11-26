@@ -20,7 +20,8 @@
    ===================================================================== */
 window.PHONE = {
   owner: "Clara", me: "C",
-  time: "23:30",                       // klockan i statusraden
+  day: 14, month: "JUN",               // telefonens datum (visas på kalenderikonen)
+  time: "02:10",                       // klockan i statusraden
 
   threads: [
     { name: "Nora", days: [{ msgs: [
@@ -29,18 +30,25 @@ window.PHONE = {
       { from: "C", text: "Du förtjänar så mycket bättre." },
       { from: "N", text: "Snälla säg inget bara." },
       { from: "C", text: "Okej." }
+    ]}]},
+    { name: "Pappa", days: [{ msgs: [
+      { from: "P", text: "Kan du köpa mjölk på vägen hem?" },
+      { from: "C", text: "Ja" },
+      { from: "P", text: "Och bröd om det finns" },
+      { from: "C", text: "Fixar" }
     ]}]}
   ],
 
   // SL-appen
   tickets: [
-    { kind: "Enkelbiljett", detail: "Buss", status: "Aktiv", validTo: "23:47" }
+    { kind: "Enkelbiljett", detail: "Buss", status: "Utgången", validTo: "13 juni 23:47", expired: true }
   ],
 
   home: [
     { icon: "photos",   label: "Bilder" },
     { icon: "music",    label: "Musik" },
     { icon: "transit",  label: "SL", open: "ticket" },
+    { icon: "calendar", label: "Kalender" },
     { icon: "camera",   label: "Kamera" },
     { icon: "notes",    label: "Anteckningar" },
     { icon: "weather",  label: "Väder" },

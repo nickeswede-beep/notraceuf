@@ -20,10 +20,11 @@
    ===================================================================== */
 window.PHONE = {
   owner: "Vincent", me: "V",
-  time: "23:30",                       // klockan i statusraden
+  day: 14, month: "JUN",               // telefonens datum (visas på kalenderikonen)
+  time: "01:58",                       // klockan i statusraden
 
   threads: [
-    { name: "Alex", days: [{ msgs: [
+    { name: "Alex", listWhen: "Igår", days: [{ date: "13 juni", msgs: [
       { from: "A", text: "Du lovade att fixa innan studenten." },
       { from: "V", text: "Vet, behöver mer tid." },
       { from: "A", text: "Du har ju för fan sagt det i veckor." },
@@ -41,17 +42,30 @@ window.PHONE = {
       { from: "V", text: "Inte ditt problem, bry dig inte." },
       { from: "N", text: "Ni fattar väl att det påverkar oss andra?" },
       { from: "V", text: "Lägg dig inte i." }
+    ]}]},
+    { name: "Syrran", days: [{ msgs: [
+      { from: "S", text: "Kan jag låna din högtalare?" },
+      { from: "V", text: "Om du lämnar tillbaka den den här gången" },
+      { from: "S", text: "Lovar" },
+      { from: "V", text: "Mm" }
     ]}]}
   ],
 
   reminders: [
-    { text: "Betala Alex" }
+    { text: "Boka tvättid" },
+    { text: "Förnya gymkortet" },
+    { text: "Klippa mig" },
+    { text: "Betala Alex" },
+    { text: "Köpa proteinpulver" },
+    { text: "Lämna tillbaka skorna" },
+    { text: "Ringa mormor" }
   ],
 
   home: [
     { icon: "music",     label: "Musik" },
     { icon: "photos",    label: "Bilder" },
     { icon: "reminders", label: "Påminnelser", open: "reminders" },
+    { icon: "calendar",  label: "Kalender" },
     { icon: "maps",      label: "Kartor" },
     { icon: "clock",     label: "Klocka" },
     { icon: "weather",   label: "Väder" },

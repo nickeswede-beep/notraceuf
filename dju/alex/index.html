@@ -20,28 +20,35 @@
    ===================================================================== */
 window.PHONE = {
   owner: "Alex", me: "A",
-  time: "23:30",                       // klockan i statusraden
+  day: 14, month: "JUN",               // telefonens datum (visas på kalenderikonen)
+  time: "01:52",                       // klockan i statusraden
 
   threads: [
-    { name: "Nora ❤️", days: [{ msgs: [
+    { name: "Nora ❤️", listWhen: "Igår", days: [{ date: "13 juni", msgs: [
       { from: "N", text: "Tänkte du ens berätta för mig?" },
       { from: "A", text: "Kan vi inte ta det en annan gång?" },
       { from: "N", text: "Du säger alltid så." },
       { from: "A", text: "Orkar inte bråka innan festen." },
       { from: "N", text: "Du är ju dum i huvet." }
     ]}]},
-    { name: "Vincent", days: [{ msgs: [
+    { name: "Vincent", listWhen: "Igår", days: [{ date: "13 juni", msgs: [
       { from: "A", text: "Du lovade att fixa innan studenten." },
       { from: "V", text: "Vet, behöver mer tid." },
       { from: "A", text: "Du har ju för fan sagt det i veckor." },
       { from: "V", text: "Löser imorgon." },
       { from: "A", text: "Vi ska snacka ikväll." }
     ]}]},
-    { name: "Clara", days: [{ msgs: [
+    { name: "Clara", listWhen: "Igår", days: [{ date: "13 juni", msgs: [
       { from: "C", text: "Tycker faktiskt du borde prata med Nora." },
       { from: "A", text: "Kan du sluta lägga dig i?!" },
       { from: "C", text: "Hon är min bästa vän Alex." },
       { from: "A", text: "Vi snackar senare." }
+    ]}]},
+    { name: "Mamma", listWhen: "11 juni", days: [{ date: "11 juni", msgs: [
+      { from: "M", text: "Du glömde din laddare här hemma" },
+      { from: "A", text: "Aa hämtar den nån dag" },
+      { from: "M", text: "Finns lasagne i frysen också om du vill ha ❤️" },
+      { from: "A", text: "Tack 🙏" }
     ]}]},
     { name: "Noah", listWhen: "10 juni", days: [{ date: "10 juni", msgs: [
       { from: "N", text: "Så vad händer med vår studentresa?" },
@@ -62,6 +69,7 @@ window.PHONE = {
     { icon: "flow",     label: "Instagram" },
     { icon: "social",   label: "Facebook" },
     { icon: "phone",    label: "Telefon", open: "phone" },
+    { icon: "calendar", label: "Kalender" },
     { icon: "photos",   label: "Bilder" },
     { icon: "camera",   label: "Kamera" },
     { icon: "music",    label: "Musik" },
