@@ -200,3 +200,21 @@
   .ticket .t-valid b { font-size: 24px; }
   .ticket.expired { background: #a9abb3; box-shadow: none; }
   .thread .preview { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; height: auto; }
+
+  /* ---------- Röstmemon ---------- */
+  .memo { margin-left: 18px; border-bottom: 1px solid #e3e3e7; }
+  .m-head { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; text-align: left; padding: 11px 16px 11px 0; }
+  .m-title { display: block; font-size: 17px; font-weight: 600; }
+  .m-sub { display: block; font-size: 14px; color: #8a8a8e; margin-top: 2px; white-space: pre; }
+  .m-len { font-size: 14px; color: #8a8a8e; font-variant-numeric: tabular-nums; }
+  .m-player { display: none; padding: 4px 16px 14px 0; }
+  .memo.open .m-player { display: block; }
+  .memo.open .m-len { visibility: hidden; }
+  .m-bar { height: 22px; display: flex; align-items: center; position: relative; cursor: pointer; }
+  .m-bar::before { content: ""; position: absolute; left: 0; right: 0; height: 4px; border-radius: 2px; background: #dcdce1; }
+  .m-bar i { position: relative; height: 4px; border-radius: 2px; background: #1c1c1e; width: 0; }
+  .m-times { display: flex; justify-content: space-between; font-size: 12px; color: #8a8a8e; font-variant-numeric: tabular-nums; }
+  .m-play { display: flex; margin: 2px auto 0; width: 52px; height: 52px; border-radius: 50%; align-items: center; justify-content: center; color: #1c1c1e; }
+  .m-play svg { width: 34px; height: 34px; }
+  .m-play:active { background: #e9e9ee; }
+  .memo.playing .m-bar i { background: #e5372b; }

@@ -17,6 +17,7 @@
    from:   samma bokstav som "me" = telefonens ägare (grön bubbla till höger)
    date, time, listWhen: valfria – utelämnas de visas ingen tid.
    open:   vilken app som öppnas. Saknas open skakar ikonen bara.
+   memos:  röstmemon i appen Röstmemon, nyast först.
    ===================================================================== */
 window.PHONE = {
   owner: "Alex", me: "A",
@@ -77,6 +78,13 @@ window.PHONE = {
   calls: [
   ],
 
+  // Röstmemon. length visas i listan, file är ljudfilen.
+  memos: [
+    { title: "Ny inspelning 3", date: "14 juni", time: "01:10", length: "0:13", file: "ljud/inspelning-3.mp3" },
+    { title: "Ny inspelning 2", date: "9 juni",  time: "22:47", length: "0:06", file: "ljud/inspelning-2.mp3" },
+    { title: "Ny inspelning",   date: "2 juni",  time: "16:24", length: "0:05", file: "ljud/inspelning-1.mp3" }
+  ],
+
   home: [
     { icon: "flow",     label: "Instagram" },
     { icon: "social",   label: "Facebook" },
@@ -86,7 +94,8 @@ window.PHONE = {
     { icon: "camera",   label: "Kamera" },
     { icon: "music",    label: "Musik" },
     { icon: "maps",     label: "Kartor" },
-    { icon: "weather",  label: "Väder" }
+    { icon: "weather",  label: "Väder" },
+    { icon: "memos",    label: "Röstmemon", open: "memos" }
   ],
   dock: [
     { icon: "messages", label: "Meddelanden", open: "messages" }

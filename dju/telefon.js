@@ -22,6 +22,7 @@ const ICONS = {
   settings: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#8e8e96"/><circle cx="30" cy="30" r="16" fill="none" stroke="#e9e9ee" stroke-width="7" stroke-dasharray="6.300 6.270"/><circle cx="30" cy="30" r="12" fill="none" stroke="#e9e9ee" stroke-width="5"/><circle cx="30" cy="30" r="4" fill="#e9e9ee"/></svg>`,
   reminders: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#fff"/><circle cx="16" cy="18" r="4.500" fill="#0a7cff"/><circle cx="16" cy="30" r="4.500" fill="#e5372b"/><circle cx="16" cy="42" r="4.500" fill="#f0972b"/><g stroke="#c4c4ca" stroke-width="2.600" stroke-linecap="round"><path d="M26 18h22M26 30h22M26 42h22"/></g></svg>`,
   transit: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#1466b8"/><rect x="15" y="11" width="30" height="34" rx="6" fill="#fff"/><rect x="19" y="16" width="22" height="13" rx="2" fill="#1466b8"/><circle cx="21.500" cy="37" r="2.600" fill="#1466b8"/><circle cx="38.500" cy="37" r="2.600" fill="#1466b8"/><rect x="18" y="45" width="6" height="5" rx="1.500" fill="#fff"/><rect x="36" y="45" width="6" height="5" rx="1.500" fill="#fff"/></svg>`,
+  memos: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a42"/><stop offset="1" stop-color="#17171b"/></linearGradient></defs><rect width="60" height="60" fill="url(#gr)"/><rect x="24" y="11" width="12" height="23" rx="6" fill="#fff"/><path d="M18 28a12 12 0 0024 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M30 40v7M23 48h14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="46" cy="14" r="4" fill="#ef4136"/></svg>`,
   phone: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd66f"/><stop offset="1" stop-color="#27ad45"/></linearGradient></defs><rect width="60" height="60" fill="url(#gt)"/><g transform="translate(12 12) scale(1.5)"><path fill="#fff" d="M6.620 10.790c1.440 2.830 3.760 5.140 6.590 6.590l2.200-2.200c.27-.27.67-.36 1.020-.24 1.120.37 2.330.57 3.570.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.390 0-17-7.610-17-17 0-.55.45-1 1-1h3.500c.55 0 1 .45 1 1 0 1.250.2 2.450.57 3.570.11.35.03.74-.25 1.020l-2.200 2.200z"/></g></svg>`,
   messages: `<svg viewBox="0 0 60 60"><defs><linearGradient id="gm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59cfa0"/><stop offset="1" stop-color="#1f9d7a"/></linearGradient></defs><rect width="60" height="60" fill="url(#gm)"/><path d="M14 15h32a5 5 0 015 5v17a5 5 0 01-5 5H28l-10 8v-8h-4a5 5 0 01-5-5V20a5 5 0 015-5z" fill="#fff"/><g fill="#1f9d7a"><circle cx="21" cy="28.500" r="2.600"/><circle cx="30" cy="28.500" r="2.600"/><circle cx="39" cy="28.500" r="2.600"/></g></svg>`
 };
@@ -52,6 +53,10 @@ document.body.innerHTML = `
 
   <div class="app" id="app-phone">
     <div class="view"><div class="top"><h1 class="large">Senaste</h1></div><div class="scroll" id="calls"></div></div>
+  </div>
+
+  <div class="app" id="app-memos">
+    <div class="view"><div class="top"><h1 class="large">Röstmemon</h1></div><div class="scroll" id="memos"></div></div>
   </div>
 
   <div class="app" id="app-reminders">
@@ -97,6 +102,7 @@ addApps($("#grid"), P.home);
 addApps($("#dock"), P.dock);
 
 function closeAll() {
+  stopMemo();
   document.querySelectorAll(".app").forEach(a => a.classList.remove("open"));
   document.querySelectorAll(".view.sub").forEach(v => v.classList.remove("show"));
 }
@@ -140,6 +146,56 @@ calls.forEach(c => {
   const when = [c.date, c.time ? "kl. " + c.time : ""].filter(Boolean).map(esc).join("<br>");
   $("#calls").appendChild(el("div", "call" + (missed ? " missed" : ""),
     `<div class="inner"><div><div class="name">${esc(c.name)}</div><div class="sub">${sub}</div></div><div class="when">${when}</div></div>`));
+});
+
+// ---- Röstmemon ----
+// memos: [{ title, date, time, length: "0:13", file: "ljud/inspelning-1.mp3" }]
+const PLAY = `<svg viewBox="0 0 24 24"><path d="M7 4.500v15l13-7.500z" fill="currentColor"/></svg>`;
+const PAUSE = `<svg viewBox="0 0 24 24"><rect x="6" y="4.500" width="4.500" height="15" rx="1" fill="currentColor"/><rect x="13.500" y="4.500" width="4.500" height="15" rx="1" fill="currentColor"/></svg>`;
+const mmss = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+let memoAudio = null, memoRow = null;
+function stopMemo() {
+  if (memoAudio) { memoAudio.pause(); memoAudio.currentTime = 0; }
+  if (memoRow) { memoRow.classList.remove("playing"); $(".m-play", memoRow).innerHTML = PLAY; }
+}
+(P.memos || []).forEach(m => {
+  const row = el("div", "memo",
+    `<button class="m-head"><span><span class="m-title">${esc(m.title)}</span><span class="m-sub">${esc([m.date, m.time].filter(Boolean).join("  "))}</span></span><span class="m-len">${esc(m.length || "")}</span></button>
+     <div class="m-player"><div class="m-bar"><i></i></div><div class="m-times"><span class="m-cur">0:00</span><span class="m-rem"></span></div><button class="m-play" aria-label="Spela upp">${PLAY}</button></div>`);
+  const fill = $(".m-bar i", row), cur = $(".m-cur", row), rem = $(".m-rem", row), btn = $(".m-play", row);
+  let audio = null;
+  const paint = () => {
+    const d = audio && isFinite(audio.duration) ? audio.duration : 0, t = audio ? audio.currentTime : 0;
+    fill.style.width = d ? (100 * t / d) + "%" : "0";
+    cur.textContent = mmss(t); rem.textContent = d ? "-" + mmss(d - t) : (m.length ? "-" + m.length : "");
+  };
+  const load = () => {
+    if (audio) return;
+    audio = new Audio(m.file); audio.preload = "auto";
+    audio.addEventListener("timeupdate", paint);
+    audio.addEventListener("loadedmetadata", paint);
+    audio.addEventListener("ended", () => { audio.currentTime = 0; row.classList.remove("playing"); btn.innerHTML = PLAY; paint(); });
+  };
+  $(".m-head", row).addEventListener("click", () => {
+    const open = row.classList.contains("open");
+    stopMemo();
+    document.querySelectorAll(".memo.open").forEach(r => r.classList.remove("open"));
+    if (!open) { row.classList.add("open"); load(); paint(); }
+  });
+  btn.addEventListener("click", () => {
+    load();
+    if (row.classList.contains("playing")) { audio.pause(); row.classList.remove("playing"); btn.innerHTML = PLAY; return; }
+    if (memoRow && memoRow !== row) stopMemo();
+    memoAudio = audio; memoRow = row;
+    audio.play(); row.classList.add("playing"); btn.innerHTML = PAUSE;
+  });
+  $(".m-bar", row).addEventListener("click", e => {
+    if (!audio || !isFinite(audio.duration)) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = audio.duration * Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); paint();
+  });
+  paint();
+  $("#memos").appendChild(row);
 });
 
 // ---- Påminnelser ----
